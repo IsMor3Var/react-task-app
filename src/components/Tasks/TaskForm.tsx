@@ -4,19 +4,19 @@ import { ITask } from '../../interfaces/tasks'
 import { useAppDispatch } from '../../app/hooks';
 import { addTask } from '../../features/tasks/taskSlice';
 import { v4 as uuid } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 export const TaskForm = () => {
 
   const { register, handleSubmit } = useForm<ITask>();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleOnSubmit: SubmitHandler<ITask> = data => {
     let { title, description, completed } = data;
     let taskTemp = { id: uuid(), title, description, completed };
-    dispatch(addTask(taskTemp))
-
-    console.log(taskTemp);
-  
+    dispatch(addTask(taskTemp));
+    navigate('/');
   }
 
   return (
