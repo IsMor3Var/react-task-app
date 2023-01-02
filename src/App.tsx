@@ -1,12 +1,13 @@
-import React from 'react';
-import { useAppSelector } from './app/hooks';
+import React, { Fragment } from 'react';
+import { TaskForm } from './components/Tasks/TaskForm';
+import { TaskList } from './components/Tasks/TaskList';
 
 function App(): JSX.Element{
-
-  const tasksState = useAppSelector( state => state.tasks )
-
   return (
-    <h1>Hello World</h1>
+    <Fragment>
+      <TaskForm/>
+      <TaskList/>
+    </Fragment>
   );
 }
 
