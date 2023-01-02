@@ -1,15 +1,19 @@
 import { Fragment } from "react";
 import { SubmitHandler, useForm } from "react-hook-form"
 import { ITask } from '../../interfaces/tasks' 
+import { useAppDispatch } from '../../app/hooks';
+import { addTask } from '../../features/tasks/taskSlice';
 import { v4 as uuid } from "uuid";
 
 export const TaskForm = () => {
 
   const { register, handleSubmit } = useForm<ITask>();
+  const dispatch = useAppDispatch()
 
   const handleOnSubmit: SubmitHandler<ITask> = data => {
     let { title, description, completed } = data;
     let taskTemp = { id: uuid(), title, description, completed };
+    dispatch(addTask(taskTemp))
 
     console.log(taskTemp);
   
