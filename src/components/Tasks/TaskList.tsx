@@ -1,6 +1,5 @@
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { Fragment } from 'react';
-import { useAppDispatch } from '../../app/hooks';
 import { deleteTask } from '../../features/tasks/taskSlice';
 import { Link } from 'react-router-dom';
 
@@ -25,6 +24,7 @@ export const TaskList = () => {
             <li key={ task.id }> 
               { task.title } - { task.description } 
               <button onClick={() => handleOnDelete(task.id)}> x </button>
+              <Link to={`/edit-task/${task.id}`} >Edit</Link>
             </li>
         )) }
       </ul>
