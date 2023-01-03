@@ -23,7 +23,7 @@ export const TaskList = () => {
         { tasksList.map( task => (
             <li key={ task.id }> 
               { task.title } - { task.description } 
-              <button onClick={() => handleOnDelete(task.id)}> x </button>
+              <button onClick={() => handleOnDelete(task.id)}> Delete </button>
               <Link to={`/edit-task/${task.id}`} >Edit</Link>
             </li>
         )) }

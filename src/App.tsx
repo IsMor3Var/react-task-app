@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
 import { TaskForm } from './components/Tasks/TaskForm';
 import { TaskList } from './components/Tasks/TaskList';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App(): JSX.Element{
   return (
-    <Fragment>
+    <div className='bg-zinc-900 h-screen text-white'>
+      <div className='flex items-center justify-center h-full'>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<TaskList/>} />
@@ -13,7 +13,8 @@ function App(): JSX.Element{
           <Route path='/edit-task/:id' element={<TaskForm/>} />
         </Routes>
       </BrowserRouter>
-    </Fragment>
+      </div>
+    </div>
   );
 }
 

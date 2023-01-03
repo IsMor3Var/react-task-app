@@ -74,7 +74,7 @@ export const TaskForm = () => {
           </label>
         </div>
         <div>
-          <button type="submit"> + </button>
+          <button type="submit"> { !params.id ? 'Save' : 'Edit' } </button>
         </div>
       </form>
     </Fragment>
