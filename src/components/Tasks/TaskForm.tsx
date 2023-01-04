@@ -56,21 +56,19 @@ export const TaskForm = () => {
               className="w-full p-2 rounded-md bg-zinc-600 mb-2" 
             />
             <div className='flex gap-x-2'>
-              <label className="block text-xs font-bold mb-2" htmlFor="completed">Completed: </label>
-              <input 
-                type={"checkbox"} 
-                {...register('completed')} 
-                id='completed' 
-                name='completed'
-                className="rounded-md bg-zinc-600 mb-2"  
-              />
+              <button
+                className={ !params.id ? 'bg-indigo-600 px-2 py-1 rounded-md' : 'bg-orange-600 px-2 py-1 rounded-md' } 
+                type="submit"
+              > 
+              { !params.id ? 'Save' : 'Edit' } 
+              </button>
+              <button
+                className='bg-red-600 px-2 py-1 rounded-md' 
+                onClick={ () => navigate('/') }
+              > 
+                Cancel 
+              </button>
             </div>
-          <button
-            className={ !params.id ? 'bg-indigo-600 px-2 py-1 rounded-md' : 'bg-orange-600 px-2 py-1 rounded-md' } 
-            type="submit"
-          > 
-            { !params.id ? 'Save' : 'Edit' } 
-          </button>
       </form>
   )
 }
