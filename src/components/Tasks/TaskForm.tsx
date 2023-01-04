@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form"
 import { ITask } from '../../interfaces/tasks' 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -17,8 +17,7 @@ export const TaskForm = () => {
 
   useEffect(() => {
     if( params.id ) setTaskEdit(tasksList.find((task) => task.id === params.id ));
-    // eslint-disable-next-line
-  }, [params.id])
+  }, [params.id, tasksList])
 
   useEffect(() => {
     if(taskEdit){
@@ -28,8 +27,7 @@ export const TaskForm = () => {
         completed: taskEdit.completed
       })
     }
-    // eslint-disable-next-line
-  }, [taskEdit])
+  }, [taskEdit, reset])
 
   const handleOnSubmit: SubmitHandler<ITask> = data => {
     let { title, description, completed } = data;
@@ -42,41 +40,37 @@ export const TaskForm = () => {
   }
 
   return (
-    <Fragment>
-      <h3>Task Form</h3>
-      <form onSubmit={handleSubmit(handleOnSubmit)}>
-        <div>
-          <label>Title: 
-            <input 
-              {...register("title")} 
-              id='title' 
-              name='title' 
+      <form onSubmit={handleSubmit(handleOnSubmit)} className="bg-zinc-800 max-w-sm p-4" >
+          <label className="block text-sm font-bold mb-2" htmlFor="title" >Title: </label>
+          <input 
+            {...register("title")} 
+            id='title' 
+            name='title'
+            className="w-full p-2 rounded-md bg-zinc-600 mb-2" 
+          />
+          <label className="block text-xs font-bold mb-2" htmlFor="description" >Description: </label>
+            <textarea 
+              {...register("description")} 
+              id='description' 
+              name='description' 
+              className="w-full p-2 rounded-md bg-zinc-600 mb-2" 
             />
-          </label>
-        </div>
-        <div>
-          <label>Description: 
+            <div className='flex gap-x-2'>
+              <label className="block text-xs font-bold mb-2" htmlFor="completed">Completed: </label>
               <input 
-                {...register("description")} 
-                id='description' 
-                name='description' 
+                type={"checkbox"} 
+                {...register('completed')} 
+                id='completed' 
+                name='completed'
+                className="rounded-md bg-zinc-600 mb-2"  
               />
-            </label>
-        </div>
-        <div>
-          <label>Completed: 
-            <input 
-              type={"checkbox"} 
-              {...register('completed')} 
-              id='completed' 
-              name='completed' 
-            />
-          </label>
-        </div>
-        <div>
-          <button type="submit"> { !params.id ? 'Save' : 'Edit' } </button>
-        </div>
+            </div>
+          <button
+            className={ !params.id ? 'bg-indigo-600 px-2 py-1 rounded-md' : 'bg-orange-600 px-2 py-1 rounded-md' } 
+            type="submit"
+          > 
+            { !params.id ? 'Save' : 'Edit' } 
+          </button>
       </form>
-    </Fragment>
   )
 }
