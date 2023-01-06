@@ -1,5 +1,6 @@
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { deleteTask, completeTask } from '../../features/tasks/taskSlice';
+import { formatDates } from '../../helpers/date';
 import { Link } from 'react-router-dom';
 
 export const TaskList = () => {
@@ -25,8 +26,8 @@ export const TaskList = () => {
         > Create Task </Link>
       </header>
       <div className='grid grid-cols-3 gap-4'>
-        { tasksList.map( task => (
-            <div key={ task.id } className="bg-neutral-800 p-4 rounded-md" >
+        { tasksList.map( task => ( 
+            <div key={ task.id } className={`bg-neutral-800 p-4 ${task.completed ? 'border-double border-sky-500 border-4' : 'border-2 border-dotted border-red-500'}`} >
               <header className='flex justify-between'>
                 <h3 className={ task.completed ? 'line-through decoration-double' : ''} >{ task.title }</h3>
                 <div className='flex gap-x-2'>
@@ -40,8 +41,14 @@ export const TaskList = () => {
                     > Delete </button>
                 </div>
               </header>
-              <span className={ task.completed ? 'line-through decoration-double' : ''} >{ task.description }</span>
-              <div className='flex gap-x-2'>
+              <div className='flex gap-x-2 mt-3 mb-3 justify-center rounded-md'>
+                <p className='text-xs opacity-60 italic'> Start: { formatDates(task.start) }</p>
+                <p className='text-xs opacity-60 italic'> End: { formatDates(task.end) }</p>
+              </div>
+              <div className='flex gap-x-2 bg-neutral-700 justify-center rounded-md'>
+                <p className='truncate p-2'>{ task.description }</p>
+              </div>
+              <div className='flex gap-x-2 mt-2'>
                 <label className="block text-xs font-bold mb-2" htmlFor={`completed.[${task.id}]`} >Completed: </label>
                 <input 
                   type={"checkbox"} 
@@ -52,7 +59,8 @@ export const TaskList = () => {
                   checked={ task.completed } 
                 />
               </div>
-              <p className='text-xs opacity-60 italic'>Created: { task.createAt }</p>
+              <p className='text-xs opacity-60 italic'>Create: { formatDates(task.createAt) }</p>
+              { task.updateAt &&  <p className='text-xs opacity-60 italic'>Update: { formatDates(task.updateAt) }</p> }
             </div>
         )) }
       </div>
