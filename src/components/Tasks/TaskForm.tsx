@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form"
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form"
 import { ITask } from '../../interfaces/tasks' 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addTask, editTask } from '../../features/tasks/taskSlice';
 import { v4 as uuid } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatDates, formatHours } from '../../helpers/date';
+import { TaskFieldArray } from './TaskFieldArray';
 
 export const TaskForm = () => {
-  const { register, handleSubmit, reset } = useForm<ITask>();
+  const { register, handleSubmit, reset, control } = useForm<ITask>({
+    defaultValues: {
+      skills: [{ id: uuid(), name: "Js" }]
+    },
+    mode: "onBlur"
+  });
+  const { fields, append, remove } = useFieldArray({
+    name: "skills",
+    control
+  });
+
   const tasksList = useAppSelector(state => state.tasks );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -68,6 +79,14 @@ export const TaskForm = () => {
               className="w-full p-2 rounded-md bg-zinc-600 mb-2" 
             />
             { taskEdit && <p className='text-xs w-full'>Date Before: { formatDates(taskEdit.end) } - { formatHours(taskEdit.end) } </p>}
+          </div>
+          <div className="m-1 w-full">
+            <TaskFieldArray 
+              fields={fields} 
+              register={register} 
+              remove={remove} 
+              append={append}
+            />
           </div>
           <div className='flex gap-x-2 mt-2'>
             <button

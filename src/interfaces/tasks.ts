@@ -7,4 +7,18 @@ export interface ITask {
     completed: boolean;
     createAt: Date;
     updateAt: Date;
+    skills: {
+        id: string;
+        name: string;
+    }[];
+}
+
+export interface IField {
+    register: Function;
+    remove: Function;
+    append: Function;
+    fields: {
+        id: string;
+        name: string
+    }[]
 }
