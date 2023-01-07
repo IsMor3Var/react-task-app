@@ -11,7 +11,7 @@ export const taskSlice = createSlice({
             state.push({ ...action.payload, completed: false, createAt: new Date() })
         },
         editTask: (state, action) => {
-            const { id, title, description, start, end } = action.payload;
+            const { id, title, description, start, end, skills } = action.payload;
             const taskFound = state.find(task => task.id === id );
             if(taskFound) {
                 taskFound.title = title
@@ -19,6 +19,7 @@ export const taskSlice = createSlice({
                 taskFound.start = start
                 taskFound.end = end
                 taskFound.updateAt = new Date()
+                taskFound.skills = skills
             } 
         },
         deleteTask: (state, action) => {
