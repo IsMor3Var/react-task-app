@@ -2,8 +2,19 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { deleteTask, completeTask } from '../../features/tasks/taskSlice';
 import { formatDates } from '../../helpers/date';
 import { Link } from 'react-router-dom';
+import { ITask, ITypesGroup } from '../../interfaces/tasks';
+import { useEffect, useState, ChangeEvent } from 'react';
+
 
 export const TaskList = () => {
+  const TYPE_RADIO: ITypesGroup = { 
+    0: 'ALL-RADIO',
+    1: 'COMPLETED-RADIO',
+    2: 'INCOMPLETE-RADIO'
+  }
+  
+  const [taskFilter, setTaskFilter] = useState<ITask[]>([]);
+  const [toggleCompleted, setToggleCompleted] = useState<string>(TYPE_RADIO[0]);
 
   const tasksList = useAppSelector(state => state.tasks )
   const dispatch = useAppDispatch();
@@ -16,17 +27,77 @@ export const TaskList = () => {
     dispatch(completeTask(id))
   }
 
+  useEffect(() => {
+    setTaskFilter(tasksList);
+    
+    if(toggleCompleted === TYPE_RADIO[0] ){
+      setTaskFilter(tasksList);
+    } 
+    if(toggleCompleted === TYPE_RADIO[1] ){
+      let taskCompleted = tasksList.filter(task => task.completed === true);
+      setTaskFilter(taskCompleted);
+    }
+    if(toggleCompleted === TYPE_RADIO[2] ){
+      let taskCompleted = tasksList.filter(task => task.completed === false);
+      setTaskFilter(taskCompleted);
+    }
+    // eslint-disable-next-line
+  }, [tasksList, toggleCompleted])
+
+  const handleOnChangeRadio = (e: ChangeEvent<HTMLInputElement>) => {
+    let valueRadio = e.target.value;
+    setToggleCompleted(valueRadio);
+  }
+
   return (
     <div className='w-4/6'>
       <header className='flex justify-between items-center py-4'>
-        <h1> {tasksList.length > 1 ? 'Tasks' : 'Task'} - {tasksList.length}</h1>
+        <h1> {taskFilter.length > 1 ? 'Tasks' : 'Task'} - {taskFilter.length}</h1>
+        <div className="flex flex-wrap">
+          <div className="flex items-center mr-4">
+              <label htmlFor="all-radio" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">All </label>
+              <input
+                checked={toggleCompleted === TYPE_RADIO[0] ? true : false} 
+                id="all-radio" 
+                type="radio" 
+                value={TYPE_RADIO[0]} 
+                name={TYPE_RADIO[0]}
+                onChange={handleOnChangeRadio} 
+                className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ml-1" 
+              />
+          </div>
+          <div className="flex items-center mr-4">
+              <label htmlFor="completed-radio" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Completed </label>
+              <input
+                checked={toggleCompleted === TYPE_RADIO[1] ? true : false} 
+                id="completed-radio" 
+                type="radio" 
+                value={TYPE_RADIO[1]} 
+                name={TYPE_RADIO[1]}
+                onChange={handleOnChangeRadio} 
+                className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600  ml-1" 
+              />
+          </div>
+          <div className="flex items-center mr-4">
+              <label htmlFor="incomplete-radio" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Incomplete </label>
+              <input 
+                checked={toggleCompleted === TYPE_RADIO[2] ? true : false}
+                id="incomplete-radio" 
+                type="radio" 
+                value={TYPE_RADIO[2]} 
+                name={TYPE_RADIO[2]}
+                onChange={handleOnChangeRadio} 
+                className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 ml-1" 
+              />
+          </div>
+        </div>
         <Link 
           to={'/create-task'}
           className='bg-indigo-600 px-2 py-1 rounded-sm text-sm' 
         > Create Task </Link>
       </header>
       <div className='grid grid-cols-3 gap-4'>
-        { tasksList.map( task => ( 
+        { taskFilter.map( task => ( 
             <div key={ task.id } className={`bg-neutral-800 p-4 ${task.completed ? 'border-double border-sky-500 border-4' : 'border-2 border-dotted border-red-500'}`} >
               <header className='flex justify-between'>
                 <h3 className={ task.completed ? 'line-through decoration-double' : ''} >{ task.title }</h3>

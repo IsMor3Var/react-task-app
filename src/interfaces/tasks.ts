@@ -22,3 +22,7 @@ export interface IField {
         name: string
     }[]
 }
+
+export interface ITypesGroup {
+    [key: number]: any
+}
